@@ -1,0 +1,96 @@
+<div class="rh-section">
+  <h2>Demandes approuvées par les managers</h2>
+
+  <div class="search-filter-section">
+    <mat-form-field>
+      <mat-label>Rechercher</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Employé, type de congé...">
+    </mat-form-field>
+  </div>
+
+  <div class="requests-table">
+    <mat-table [dataSource]="dataSource" matSort>
+      <!-- Employee Column -->
+      <ng-container matColumnDef="employee">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Employé</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.userName }}</mat-cell>
+      </ng-container>
+
+      <!-- Manager Column -->
+      <ng-container matColumnDef="manager">
+        <mat-header-cell *matHeaderCellDef>Manager</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.commentaireManager || '-' }}</mat-cell>
+      </ng-container>
+
+      <!-- Type Column -->
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Type de congé</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.typeCongeLibelle }}</mat-cell>
+      </ng-container>
+
+      <!-- Du Column -->
+      <ng-container matColumnDef="du">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Du</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.dateDebut | date:'shortDate' }}</mat-cell>
+      </ng-container>
+
+      <!-- Au Column -->
+      <ng-container matColumnDef="au">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Au</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.dateFin | date:'shortDate' }}</mat-cell>
+      </ng-container>
+
+      <!-- Jours Column -->
+      <ng-container matColumnDef="jours">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Jours</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ calculateJours(row) }}</mat-cell>
+      </ng-container>
+
+      <!-- Motif Column -->
+      <ng-container matColumnDef="motif">
+        <mat-header-cell *matHeaderCellDef>Motif</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.motif || '-' }}</mat-cell>
+      </ng-container>
+
+      <!-- Justificatif Column -->
+      <ng-container matColumnDef="justificatif">
+        <mat-header-cell *matHeaderCellDef>Justificatifs</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <button *ngIf="row.justificatif" mat-icon-button class="doc-button"
+                  (click)="openJustificatif(row.id)" title="Télécharger le justificatif">
+            <mat-icon>picture_as_pdf</mat-icon>
+          </button>
+          <span *ngIf="!row.justificatif" class="no-doc">—</span>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Commentaire Manager Column -->
+      <ng-container matColumnDef="commentaireManager">
+        <mat-header-cell *matHeaderCellDef>Commentaire Manager</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.commentaireManager || '-' }}</mat-cell>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <div class="actions-cell">
+            <!-- Changed from icon-only to a labeled button 'Traiter' for clarity -->
+            <button mat-stroked-button class="btn-traiter" (click)="openActionDialog(row)" title="Traiter"
+                    [disabled]="isHandledByRh(row)">
+              <mat-icon>edit</mat-icon>
+              Traiter
+            </button>
+          </div>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Table Header and Rows -->
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
+
+  <!-- Paginator -->
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+</div>

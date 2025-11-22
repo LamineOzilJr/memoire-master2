@@ -1,0 +1,26 @@
+<div class="solde-modal">
+  <div class="modal-header">
+    <h2>SOLDE DE CONGES</h2>
+    <button mat-icon-button (click)="close()" class="close-btn">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <p class="solde-label">Votre solde (en jours) est de :</p>
+    
+    <div class="solde-badge">
+      <span class="solde-value">{{ total | number:'1.0-0' }}</span>
+    </div>
+
+    <div class="modal-actions">
+      <button mat-raised-button color="primary" class="btn-add-request" [disabled]="!canAdd" (click)="goToAdd()">
+        Ajouter une demande
+      </button>
+      <button mat-raised-button color="warn" (click)="close()" class="btn-close">
+        FERMER
+      </button>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,96 @@
+<div class="modal-overlay">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>Demander congés</h2>
+      <button type="button" class="close-btn" (click)="router.navigate(['/dashboard'])">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form-content">
+      <!-- Leave Types Grid -->
+      <div class="form-section">
+        <label class="section-label">Type de congés:</label>
+        <div class="leave-types-grid">
+          <mat-checkbox
+            *ngFor="let type of leaveTypes"
+            [checked]="selectedLeaveTypeId === type.id"
+            class="leave-type-option"
+            (change)="onLeaveTypeChange(type.id, $event)">
+            {{ type.libelle }}
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <!-- Date Fields Row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="field-label">Du</label>
+          <mat-form-field appearance="outline" class="date-field">
+            <input matInput [matDatepicker]="pickerDu" formControlName="dateDebut" (dateChange)="calculateDays()">
+            <mat-datepicker-toggle matSuffix [for]="pickerDu"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDu></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">Au</label>
+          <mat-form-field appearance="outline" class="date-field">
+            <input matInput [matDatepicker]="pickerAu" formControlName="dateFin" (dateChange)="calculateDays()">
+            <mat-datepicker-toggle matSuffix [for]="pickerAu"></mat-datepicker-toggle>
+            <mat-datepicker #pickerAu></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">Nbr de jours</label>
+          <mat-form-field appearance="outline" class="days-field">
+            <input matInput [value]="numberOfDays" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Manager Selection -->
+      <div class="form-group">
+        <label class="field-label">Choisir Manager</label>
+        <mat-form-field appearance="outline" class="manager-field">
+          <mat-select formControlName="managerId">
+            <mat-option *ngFor="let manager of managers" [value]="manager.id">
+              {{ manager.prenom }} {{ manager.nom }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- File Upload -->
+      <div class="form-group">
+        <label class="field-label">Importer documents</label>
+        <div class="file-upload-container">
+          <input type="file" #fileInput (change)="onFileChange($event)" style="display: none;">
+          <button type="button" class="file-upload-btn" (click)="fileInput.click()">
+            Choisir un fichier
+          </button>
+          <span class="file-name" *ngIf="selectedFileName">{{ selectedFileName }}</span>
+        </div>
+      </div>
+
+      <!-- Reason Text Area -->
+      <div class="form-group">
+        <label class="field-label">Reason:</label>
+        <mat-form-field appearance="outline" class="reason-field">
+          <textarea matInput formControlName="motif" placeholder="Je dois prendre une épouse..." rows="4"></textarea>
+        </mat-form-field>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="form-actions">
+        <button type="submit" class="btn-primary" [disabled]="form.invalid">
+          Ajouter
+        </button>
+        <button type="button" class="btn-secondary" (click)="router.navigate(['/dashboard'])">
+          Annuler
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

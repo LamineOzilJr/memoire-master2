@@ -1,0 +1,34 @@
+<mat-card class="absences-card">
+  <mat-card-header>
+    <mat-card-title>Historique des absences</mat-card-title>
+    <mat-card-subtitle>Consultez les congés et absences enregistrés</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div *ngIf="isLoading" class="loading">Chargement...</div>
+    <div *ngIf="!isLoading && absences.length === 0" class="empty">Aucune absence trouvée.</div>
+
+    <div *ngIf="!isLoading && absences.length > 0" class="table-wrapper">
+      <table class="absences-table">
+        <thead>
+          <tr>
+            <th>Employé</th>
+            <th>Du</th>
+            <th>Au</th>
+            <th>Jours</th>
+            <th>Motif</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of absences">
+            <td>{{ a.userName }}</td>
+            <td>{{ a.dateDebut | date:'shortDate' }}</td>
+            <td>{{ a.dateFin | date:'shortDate' }}</td>
+            <td>{{ a.nombreJours }}</td>
+            <td>{{ a.motif || '-' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>

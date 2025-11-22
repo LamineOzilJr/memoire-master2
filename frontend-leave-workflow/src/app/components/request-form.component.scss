@@ -1,0 +1,319 @@
+/* Request Form Styling to match Figma design */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f8f9fa;
+  border-radius: 12px 12px 0 0;
+
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      background-color: #f0f0f0;
+    }
+
+    mat-icon {
+      font-size: 24px;
+      color: #666;
+    }
+  }
+}
+
+.form-content {
+  padding: 32px;
+}
+
+.form-section {
+  margin-bottom: 32px;
+}
+
+.section-label {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.field-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.leave-types-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  
+  .leave-type-option {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &.mat-mdc-checkbox-checked {
+      border-color: #2196F3;
+      background-color: #2196F3;
+      color: white;
+    }
+    
+    &:hover:not(.mat-mdc-checkbox-checked) {
+      border-color: #2196F3;
+      background-color: #f0f8ff;
+    }
+    
+    &:hover.mat-mdc-checkbox-checked {
+      background-color: #1976D2;
+    }
+
+    ::ng-deep .mat-mdc-checkbox {
+      width: 100%;
+      height: 100%;
+    }
+
+    ::ng-deep .mdc-checkbox {
+      display: none;
+    }
+
+    ::ng-deep .mdc-form-field {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    ::ng-deep .mdc-form-field > label {
+      width: 100%;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    ::ng-deep .mat-mdc-checkbox-label {
+      width: 100%;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+  align-items: end;
+}
+
+.form-group {
+  flex: 1;
+  
+  &:last-child {
+    flex: 0 0 120px;
+  }
+}
+
+.date-field,
+.days-field,
+.manager-field,
+.reason-field {
+  width: 100%;
+  
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+  
+  ::ng-deep .mat-form-field-outline {
+    border-radius: 8px;
+  }
+  
+  ::ng-deep .mat-form-field-outline-thick {
+    border-width: 2px;
+  }
+}
+
+.days-field {
+  ::ng-deep input {
+    text-align: center;
+    font-weight: 600;
+    color: #3f51b5;
+  }
+}
+
+.file-upload-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  transition: border-color 0.2s ease;
+  
+  &:hover {
+    border-color: #3f51b5;
+  }
+}
+
+.file-upload-btn {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: #e8e8e8;
+    border-color: #3f51b5;
+  }
+}
+
+.file-name {
+  font-size: 14px;
+  color: #666;
+  font-style: italic;
+}
+
+.reason-field {
+  ::ng-deep textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.btn-primary {
+  background: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover:not(:disabled) {
+    background: #303f9f;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3);
+  }
+  
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+}
+
+.btn-secondary {
+  background: white;
+  color: #666;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    border-color: #3f51b5;
+    color: #3f51b5;
+    transform: translateY(-1px);
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .modal-container {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .form-content {
+    padding: 24px;
+  }
+  
+  .leave-types-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 16px;
+    
+    .form-group:last-child {
+      flex: 1;
+    }
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+    }
+  }
+}
+
