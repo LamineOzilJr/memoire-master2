@@ -34,4 +34,5 @@ public class DemandeResponse {
     private LocalDateTime dateTraitementRh;
     private String emailStatus;
     private String emailError;
+    private Boolean hasOverlap;  // New field to indicate if demand overlaps with others in same department
 }

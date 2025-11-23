@@ -63,4 +63,15 @@
 @media (max-width:768px){ .manager-dashboard .kpi-cards .kpi-card{padding:16px;} }
 .manager-dashboard .kpi-cards .kpi-card .kpi-value{font-size:28px;font-weight:700;color:#2e7d32;margin-bottom:8px}
 @media (max-width:768px){ .manager-dashboard .kpi-cards .kpi-card .kpi-value{font-size:22px;} }
+
+// KPI card color variants
+.manager-dashboard .kpi-cards .kpi-card.blue{background:#e3f2fd}
+.manager-dashboard .kpi-cards .kpi-card.blue .kpi-value{color:#1976d2}
+
+.manager-dashboard .kpi-cards .kpi-card.yellow{background:#fff3e0}
+.manager-dashboard .kpi-cards .kpi-card.yellow .kpi-value{color:#f57c00}
+
+.manager-dashboard .kpi-cards .kpi-card.red{background:#ffebee}
+.manager-dashboard .kpi-cards .kpi-card.red .kpi-value{color:#d32f2f}
+
 .manager-dashboard h3{margin-bottom:20px;color:#1a1a1a}

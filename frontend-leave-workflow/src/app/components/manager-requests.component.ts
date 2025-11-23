@@ -15,7 +15,7 @@ import { interval, Subject, takeUntil } from 'rxjs';
 })
 export class ManagerRequestsComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<LeaveRequestResponse>();
-  displayedColumns = ['employee', 'type', 'du', 'au', 'jours', 'motif', 'justificatif', 'commentaireManager', 'actions'];
+  displayedColumns = ['employee', 'type', 'du', 'au', 'jours', 'chevauchement', 'motif', 'justificatif', 'commentaireManager', 'actions'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -79,6 +79,14 @@ export class ManagerRequestsComponent implements OnInit, OnDestroy {
     if (request) {
       this.openActionDialog(request);
     }
+  }
+
+  hasOverlap(row: LeaveRequestResponse): boolean {
+    return row.hasOverlap || false;
+  }
+
+  getRowClass(row: LeaveRequestResponse): string {
+    return this.hasOverlap(row) ? 'overlap-row' : '';
   }
 
 

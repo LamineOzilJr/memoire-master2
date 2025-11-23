@@ -342,6 +342,13 @@ public class DemandeCongeService {
                         }
                     }
                 }
+
+                // Set user as inactive during the absence period
+                System.out.println("   🔐 Setting user as INACTIVE (active=false) for the absence period");
+                demande.getUser().setActive(false);
+                userRepository.save(demande.getUser());
+                System.out.println("   ✅ User status updated to inactive");
+
             } catch (Exception e) {
                 System.err.println("   ❌ ERROR during processing: " + e.getMessage());
                 e.printStackTrace();
@@ -459,6 +466,20 @@ public class DemandeCongeService {
 
     private DemandeResponse mapToDemandeResponse(DemandeConge demande) {
         long nombreJours = demande.getDateDebut().until(demande.getDateFin().plusDays(1), java.time.temporal.ChronoUnit.DAYS);
+
+        // Check for overlaps in same department
+        boolean hasOverlap = false;
+        if (demande.getUser().getDepartement() != null) {
+            List<DemandeConge> overlappingDemands = demandeCongeRepository.findOverlappingDemandsInDepartment(
+                    demande.getUser().getDepartement().getId(),
+                    demande.getDateDebut(),
+                    demande.getDateFin()
+            );
+            // Filter out current demand and check if any others exist
+            hasOverlap = overlappingDemands.stream()
+                    .anyMatch(d -> !d.getId().equals(demande.getId()));
+        }
+
         return DemandeResponse.builder()
                 .id(demande.getId())
                 .userId(demande.getUser().getId())
@@ -477,6 +498,7 @@ public class DemandeCongeService {
                 .commentaireRh(demande.getCommentaireRh())
                 .dateTraitementRh(demande.getDateTraitementRh())
                 .dateCreation(demande.getDateCreation())
+                .hasOverlap(hasOverlap)
                 .build();
     }
 

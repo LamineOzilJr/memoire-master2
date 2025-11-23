@@ -39,6 +39,16 @@
         <mat-cell *matCellDef="let row"> {{ calculateJours(row) }} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="chevauchement">
+        <mat-header-cell *matHeaderCellDef> Chevauchement </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="overlap-cell">
+          <span *ngIf="hasOverlap(row)" class="overlap-badge">
+            <mat-icon class="overlap-icon">warning</mat-icon> Oui
+          </span>
+          <span *ngIf="!hasOverlap(row)" class="no-overlap">—</span>
+        </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="motif">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Motifs de la demande </mat-header-cell>
         <mat-cell *matCellDef="let row"> {{ row.motif || '-' }} </mat-cell>
@@ -72,7 +82,7 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="getRowClass(row)"></mat-row>
 
     </mat-table>
   </div>

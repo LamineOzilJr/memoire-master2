@@ -116,15 +116,24 @@ public class SoldeCongeService {
             throw new RuntimeException("Dates invalides: dateFin est antérieure à dateDebut");
         }
 
-        // Compute days using epochDay to avoid ChronoUnit anomalies and ensure inclusive interval
-        long daysLong = dateFin.toEpochDay() - dateDebut.toEpochDay() + 1;
-        if (daysLong <= 0) {
-            throw new RuntimeException("Dates invalides ou période nulle: daysLong=" + daysLong);
+        // Compute working days (excluding weekends: Saturday=6, Sunday=7)
+        long workingDays = 0;
+        LocalDate current = dateDebut;
+        while (!current.isAfter(dateFin)) {
+            int dayOfWeek = current.getDayOfWeek().getValue(); // Monday=1, ..., Saturday=6, Sunday=7
+            if (dayOfWeek < 6) { // Exclude Saturday (6) and Sunday (7)
+                workingDays++;
+            }
+            current = current.plusDays(1);
         }
-        double days = (double) daysLong;
+
+        if (workingDays <= 0) {
+            throw new RuntimeException("Pas de jours ouvrables dans la période: dateDebut=" + dateDebut + ", dateFin=" + dateFin);
+        }
+        double days = (double) workingDays;
 
         // Log dates and computed days
-        System.out.println("📅 DateDebut: " + dateDebut + " | DateFin: " + dateFin + " | Days computed (inclusive, epoch): " + daysLong);
+        System.out.println("📅 DateDebut: " + dateDebut + " | DateFin: " + dateFin + " | Working days (excluding weekends): " + workingDays);
         System.out.println("📝 Leave Type: " + type.getLibelle() + " | Max Jours: " + type.getMaxJours());
 
         // Log BEFORE deduction including persisted identifiers

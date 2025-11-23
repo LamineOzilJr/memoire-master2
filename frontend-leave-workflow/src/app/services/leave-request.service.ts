@@ -26,6 +26,7 @@ export interface LeaveRequestResponse extends LeaveRequest {
   commentaireRh?: string;
   emailStatus?: string;
   emailError?: string;
+  hasOverlap?: boolean;  // New field for overlap detection
 }
 
 @Injectable({
