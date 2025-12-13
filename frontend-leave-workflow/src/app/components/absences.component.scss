@@ -1,0 +1,18 @@
+.absences-card{background:white;border-radius:12px;padding:12px;margin:12px 0;box-shadow:0 4px 12px rgba(0,0,0,0.06)}
+.absences-card mat-card-header{padding:16px 20px;border-bottom:1px solid #f1f5fb}
+.absences-card mat-card-title{font-size:18px;font-weight:600;color:#1a1a1a}
+.absences-card mat-card-subtitle{font-size:13px;color:#666}
+.table-wrapper{overflow:auto;padding:12px}
+.absences-table{width:100%;border-collapse:collapse;min-width:700px}
+.absences-table thead th{background:#4361ee;color:white;padding:12px;text-align:left;border-radius:6px}
+.absences-table th,.absences-table td{padding:12px;border-bottom:1px solid #f5f7fb}
+.absences-table tbody tr:nth-child(even){background:#fafcff}
+.absences-table tbody tr:hover{background:#f0f4ff}
+.loading,.empty{text-align:center;padding:24px;color:#666}
+@media (max-width:768px){
+  .absences-table{min-width:0;font-size:13px}
+  .absences-card{padding:8px}
+  .absences-table thead th{padding:10px}
+  .absences-table td{padding:10px}
+}
+

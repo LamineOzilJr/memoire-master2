@@ -1,0 +1,16 @@
+package sn.groupeisi.leaveworkflow.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ManagerStatsDto {
+    private long totalEmployees;
+    private long activeEmployees;
+    private long totalDemandesEnAttente;
+    private long totalAbsents;
+}
+

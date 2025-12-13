@@ -1,0 +1,60 @@
+<div class="edit-dialog-container">
+  <h2>Modifier la demande de congé</h2>
+
+  <form [formGroup]="form">
+    <div class="form-group">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Type de congé</mat-label>
+        <mat-select formControlName="typeCongeId">
+          <mat-option *ngFor="let type of leaveTypes" [value]="type.id">
+            {{ type.libelle }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="fill" class="half-width">
+        <mat-label>Date début</mat-label>
+        <input #dateDebutRef matInput type="date" formControlName="dateDebut">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="half-width">
+        <mat-label>Date fin</mat-label>
+        <input matInput type="date" formControlName="dateFin">
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Motif (optionnel)</mat-label>
+        <textarea matInput formControlName="motif" rows="3"></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <label for="justificatif" class="file-label">Justificatif (optionnel)</label>
+      <input
+        type="file"
+        id="justificatif"
+        (change)="onFileSelected($event)"
+        class="file-input"
+        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+      >
+      <small *ngIf="selectedFile" class="file-info">
+        Fichier sélectionné: {{ selectedFile.name }}
+      </small>
+    </div>
+  </form>
+
+  <div class="dialog-actions">
+    <button mat-button (click)="cancel()">Annuler</button>
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="isLoading">
+      <span *ngIf="!isLoading">Mettre à jour</span>
+      <span *ngIf="isLoading">
+        <mat-spinner diameter="20"></mat-spinner>
+        Mise à jour...
+      </span>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,152 @@
+<div class="entreprise-management">
+  <!-- Top Header with Profile and Logout -->
+  <div class="top-header">
+    <div class="header-left">
+      <h1>Gestion des Entreprises</h1>
+    </div>
+    <div class="header-right">
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-profile-btn">
+        <img [src]="'https://ui-avatars.com/api/?name=' + (userPrenom || 'User') + '&background=4361ee&color=fff'" alt="User" class="avatar">
+        <span>{{ userPrenom || 'Utilisateur' }}</span>
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item routerLink="/dashboard">
+          <mat-icon>dashboard</mat-icon>
+          <span>Tableau de bord</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Déconnexion</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <button mat-raised-button color="primary" (click)="openForm()" class="btn-add">
+      <mat-icon>add</mat-icon>
+      Ajouter une entreprise
+    </button>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-section">
+    <mat-form-field class="search-field" appearance="outline">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput placeholder="Rechercher une entreprise..." [(ngModel)]="searchTerm" (input)="searchEntreprises()">
+      <button mat-icon-button matSuffix *ngIf="searchTerm" (click)="searchTerm=''; searchEntreprises()">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading-overlay" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Entreprise Form Modal -->
+  <div class="form-overlay" *ngIf="showForm" (click)="closeForm()">
+    <div class="form-container" (click)="$event.stopPropagation()">
+      <div class="form-header">
+        <h2>{{ isEditing ? 'Modifier l\'entreprise' : 'Nouvelle entreprise' }}</h2>
+        <button mat-icon-button (click)="closeForm()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <form [formGroup]="entForm" (ngSubmit)="saveEntreprise()" class="ent-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Libellé *</mat-label>
+          <input matInput formControlName="libelle">
+          <mat-error *ngIf="entForm.get('libelle')?.invalid">
+            Libellé requis (minimum 2 caractères)
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="3"></textarea>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-raised-button type="button" (click)="closeForm()">Annuler</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="entForm.invalid">
+            <mat-icon>{{ isEditing ? 'save' : 'add' }}</mat-icon>
+            {{ isEditing ? 'Enregistrer' : 'Créer' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Entreprises Table -->
+  <div class="ents-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Libellé</th>
+          <th>Description</th>
+          <th>Nombre d'utilisateurs</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ent of filteredEntreprises">
+          <td><strong>{{ ent.libelle }}</strong></td>
+          <td>{{ ent.description || '-' }}</td>
+          <td>{{ ent.userCount || 0 }} utilisateur(s)</td>
+          <td>
+            <span class="status-badge" [class.active]="ent.active" [class.inactive]="!ent.active">
+              <mat-icon>{{ ent.active ? 'check_circle' : 'cancel' }}</mat-icon>
+              {{ ent.active ? 'Actif' : 'Inactif' }}
+            </span>
+          </td>
+          <td class="actions">
+            <button mat-icon-button color="primary" (click)="editEntreprise(ent)" matTooltip="Modifier">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteEntreprise(ent.id!)" matTooltip="Supprimer">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredEntreprises.length === 0 && !loading">
+          <td colspan="5" class="no-data">
+            <mat-icon>inbox</mat-icon>
+            <p>Aucune entreprise trouvée</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="card-icon">
+          <mat-icon>apartment</mat-icon>
+        </div>
+        <div class="card-info">
+          <h3>{{ entreprises.length }}</h3>
+          <p>Total Entreprises</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card active">
+      <mat-card-content>
+        <div class="card-icon">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="card-info">
+          <h3>{{ (entreprises | filter: {active: true}).length }}</h3>
+          <p>Entreprises Actives</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="dialog-container rh-dialog">
+  <h2>Traiter la demande de congé (Service RH)</h2>
+
+  <!-- Make the main content scrollable inside the dialog body -->
+  <div class="dialog-body">
+    <div class="request-info">
+      <p><strong>Employé:</strong> {{ request.userName }}</p>
+      <p><strong>Type de congé:</strong> {{ request.typeCongeLibelle }}</p>
+      <p><strong>Période:</strong> {{ request.dateDebut | date:'shortDate' }} au {{ request.dateFin | date:'shortDate' }}</p>
+      <p><strong>Nombre de jours:</strong> {{ request.nombreJours }}</p>
+      <p><strong>Motif:</strong> {{ request.motif || 'Non spécifié' }}</p>
+      <p><strong>Statut Manager:</strong> <span class="status-badge approuve">Approuvé</span></p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="actions">
+      <button mat-stroked-button class="btn-validate" (click)="selectAction('validate')"
+              [class.selected]="selectedAction === 'validate'" [disabled]="isLoading">
+        <mat-icon>check_circle</mat-icon> Valider
+      </button>
+      <button mat-stroked-button class="btn-info" (click)="selectAction('info')"
+              [class.selected]="selectedAction === 'info'" [disabled]="isLoading">
+        <mat-icon>info</mat-icon> Plus d'infos
+      </button>
+      <button mat-stroked-button class="btn-reject" (click)="selectAction('reject')"
+              [class.selected]="selectedAction === 'reject'" [disabled]="isLoading">
+        <mat-icon>cancel</mat-icon> Refuser
+      </button>
+    </div>
+
+    <div *ngIf="selectedAction === 'info' || selectedAction === 'reject'" class="comment-section">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ selectedAction === 'info' ? 'Informations requises' : 'Motif du refus' }}</mat-label>
+        <textarea matInput [(ngModel)]="comment" rows="4" placeholder="Entrez votre message..." [disabled]="isLoading"></textarea>
+        <mat-hint *ngIf="selectedAction === 'info'">Décrivez les informations supplémentaires nécessaires</mat-hint>
+        <mat-hint *ngIf="selectedAction === 'reject'">Expliquez le motif du refus de cette demande</mat-hint>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="dialog-actions">
+    <button mat-button (click)="cancel()" [disabled]="isLoading">Annuler</button>
+    <button mat-raised-button class="primary-action" (click)="submit()" [disabled]="isLoading || !selectedAction">
+      <mat-spinner *ngIf="isLoading" diameter="20" class="spinner"></mat-spinner>
+      <span *ngIf="!isLoading">{{ getActionLabel() || 'Sélectionner une action' }}</span>
+      <span *ngIf="isLoading">Traitement en cours...</span>
+    </button>
+  </div>
+</div>

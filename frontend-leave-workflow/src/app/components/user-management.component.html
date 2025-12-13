@@ -1,0 +1,303 @@
+<div class="user-management">
+  <!-- Top Header with Profile and Logout -->
+  <div class="top-header">
+    <div class="header-left">
+      <h1>Gestion des Utilisateurs</h1>
+    </div>
+    <div class="header-right">
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-profile-btn">
+        <img [src]="'https://ui-avatars.com/api/?name=' + (userPrenom || 'User') + '&background=4361ee&color=fff'" alt="User" class="avatar">
+        <span>{{ userPrenom || 'Utilisateur' }}</span>
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item routerLink="/dashboard">
+          <mat-icon>dashboard</mat-icon>
+          <span>Tableau de bord</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Déconnexion</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <button mat-raised-button color="primary" (click)="openForm()" class="btn-add">
+      <mat-icon>add</mat-icon>
+      Ajouter un utilisateur
+    </button>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-section">
+    <mat-form-field class="search-field" appearance="outline">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput
+             placeholder="Rechercher par nom, email ou matricule..."
+             [(ngModel)]="searchTerm"
+             (input)="searchUsers()">
+      <button mat-icon-button matSuffix *ngIf="searchTerm" (click)="searchTerm=''; searchUsers()">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading-overlay" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- User Form Modal -->
+  <div class="form-overlay" *ngIf="showForm" (click)="closeForm()">
+    <div class="form-container" (click)="$event.stopPropagation()">
+      <div class="form-header">
+        <h2>{{ isEditing ? 'Modifier l\'utilisateur' : 'Nouvel utilisateur' }}</h2>
+        <button mat-icon-button (click)="closeForm()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <form [formGroup]="userForm" (ngSubmit)="saveUser()" class="user-form">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Prénom *</mat-label>
+            <input matInput formControlName="prenom">
+            <mat-error *ngIf="userForm.get('prenom')?.touched && userForm.get('prenom')?.invalid">
+              {{ getFormError('prenom') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nom *</mat-label>
+            <input matInput formControlName="nom">
+            <mat-error *ngIf="userForm.get('nom')?.touched && userForm.get('nom')?.invalid">
+              {{ getFormError('nom') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Email *</mat-label>
+            <input matInput type="email" formControlName="email">
+            <mat-error *ngIf="userForm.get('email')?.touched && userForm.get('email')?.invalid">
+              {{ getFormError('email') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ isEditing ? 'Nouveau mot de passe (optionnel)' : 'Mot de passe *' }}</mat-label>
+            <input matInput type="password" formControlName="password">
+            <mat-hint *ngIf="!isEditing">Minimum 8 caractères</mat-hint>
+            <mat-error *ngIf="userForm.get('password')?.touched && userForm.get('password')?.invalid">
+              {{ getFormError('password') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Matricule {{ isEditing ? '*' : ''}}</mat-label>
+            <input matInput
+                   formControlName="matricule"
+                   style="text-transform: uppercase; font-weight: bold; font-size: 16px;"
+                   [readonly]="!isEditing"
+                   [class.auto-generated]="!isEditing"
+                   placeholder="Sélectionner une entreprise">
+            <mat-hint *ngIf="isEditing">Format: 2-3 lettres + 3 chiffres (ex: SAL001, MAN001)</mat-hint>
+            <mat-error *ngIf="userForm.get('matricule')?.touched && userForm.get('matricule')?.invalid">
+              {{ getFormError('matricule') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Rôle *</mat-label>
+            <mat-select formControlName="role">
+              <mat-option *ngFor="let role of roles" [value]="role.value">
+                {{ role.label }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="userForm.get('role')?.touched && userForm.get('role')?.invalid">
+              {{ getFormError('role') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Poste *</mat-label>
+            <input matInput formControlName="poste">
+            <mat-error *ngIf="userForm.get('poste')?.touched && userForm.get('poste')?.invalid">
+              {{ getFormError('poste') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Téléphone</mat-label>
+            <input matInput formControlName="telephone">
+            <mat-hint>Format: +221770000000</mat-hint>
+            <mat-error *ngIf="userForm.get('telephone')?.touched && userForm.get('telephone')?.invalid">
+              {{ getFormError('telephone') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Département</mat-label>
+            <mat-select formControlName="departementId">
+              <mat-option [value]="null">Aucun</mat-option>
+              <mat-option *ngFor="let dept of departements" [value]="dept.id">
+                {{ dept.libelle }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Entreprise</mat-label>
+            <mat-select formControlName="entrepriseId">
+              <mat-option [value]="null">Aucun</mat-option>
+              <mat-option *ngFor="let ent of entreprises" [value]="ent.id">
+                {{ ent.libelle }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Manager</mat-label>
+            <mat-select formControlName="managerId" [disabled]="!userForm.get('entrepriseId')?.value">
+              <mat-option [value]="null">Aucun</mat-option>
+              <mat-option *ngFor="let manager of getFilteredManagers()" [value]="manager.id">
+                {{ manager.prenom }} {{ manager.nom }}
+              </mat-option>
+              <mat-option *ngIf="userForm.get('entrepriseId')?.value && getFilteredManagers().length === 0" disabled>
+                pas de manager
+              </mat-option>
+              <mat-option *ngIf="!userForm.get('entrepriseId')?.value" disabled>
+                Sélectionner une entreprise d'abord
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Adresse</mat-label>
+          <textarea matInput formControlName="adresse" rows="2"></textarea>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-raised-button type="button" (click)="closeForm()">
+            Annuler
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid">
+            <mat-icon>{{ isEditing ? 'save' : 'add' }}</mat-icon>
+            {{ isEditing ? 'Enregistrer' : 'Créer' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="users-table">
+    <table>
+      <thead>
+      <tr>
+        <th>Matricule</th>
+        <th>Nom Complet</th>
+        <th>Email</th>
+        <th>Rôle</th>
+        <th>Poste</th>
+        <th>Téléphone</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let user of filteredUsers">
+        <td>{{ user.matricule }}</td>
+        <td>
+          <div class="user-info">
+            <mat-icon class="user-avatar">person</mat-icon>
+            <span>{{ user.prenom }} {{ user.nom }}</span>
+          </div>
+        </td>
+        <td>{{ user.email }}</td>
+        <td>
+            <span class="role-badge" [class]="'role-' + user.role">
+              {{ getRoleLabel(user.role) }}
+            </span>
+        </td>
+        <td>{{ user.poste }}</td>
+        <td>{{ user.telephone || '-' }}</td>
+        <td>
+          <button mat-button
+                  class="status-toggle"
+                  [class.active]="user.active"
+                  [class.inactive]="!user.active"
+                  (click)="toggleUserStatus(user)"
+                  matTooltip="{{ user.active ? 'Cliquer pour désactiver' : 'Cliquer pour activer' }}">
+            <mat-icon>{{ user.active ? 'check_circle' : 'cancel' }}</mat-icon>
+            {{ user.active ? 'Actif' : 'Inactif' }}
+          </button>
+        </td>
+        <td class="actions">
+          <button mat-icon-button color="primary" (click)="editUser(user)" matTooltip="Modifier">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteUser(user.id!)" matTooltip="Supprimer">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredUsers.length === 0 && !loading">
+        <td colspan="8" class="no-data">
+          <mat-icon>inbox</mat-icon>
+          <p>Aucun utilisateur trouvé</p>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="card-icon">
+          <mat-icon>people</mat-icon>
+        </div>
+        <div class="card-info">
+          <h3>{{ users.length }}</h3>
+          <p>Total Utilisateurs</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card active">
+      <mat-card-content>
+        <div class="card-icon">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="card-info">
+          <h3>{{ (users | filter: {active: true}).length }}</h3>
+          <p>Utilisateurs Actifs</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card inactive">
+      <mat-card-content>
+        <div class="card-icon">
+          <mat-icon>cancel</mat-icon>
+        </div>
+        <div class="card-info">
+          <h3>{{ (users | filter: {active: false}).length }}</h3>
+          <p>Utilisateurs Inactifs</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

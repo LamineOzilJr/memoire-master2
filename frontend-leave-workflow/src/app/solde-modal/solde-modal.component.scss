@@ -1,0 +1,87 @@
+.solde-modal {
+  width: 500px;
+  max-width: 90vw;
+}
+
+.modal-header {
+  background: #4361ee;
+  color: white;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: -24px -24px 0 -24px;
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .close-btn {
+    color: white;
+  }
+}
+
+.modal-body {
+  padding: 40px 30px;
+  text-align: center;
+  background: #fffbf0;
+
+  .solde-label {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: 500;
+  }
+
+  .solde-badge {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #4361ee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 40px;
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+
+    .solde-value {
+      font-size: 48px;
+      font-weight: 700;
+      color: white;
+    }
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+
+    button {
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      min-width: 180px;
+    }
+
+    .btn-add-request {
+      background: #4361ee;
+      color: white;
+
+      &:hover {
+        background: #3651d4;
+      }
+    }
+
+    .btn-close {
+      background: #ef5350;
+      color: white;
+
+      &:hover {
+        background: #e53935;
+      }
+    }
+  }
+}

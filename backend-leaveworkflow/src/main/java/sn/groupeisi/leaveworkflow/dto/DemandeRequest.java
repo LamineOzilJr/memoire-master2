@@ -1,0 +1,21 @@
+package sn.groupeisi.leaveworkflow.dto;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class DemandeRequest {
+    @NotNull
+    private Long typeCongeId;
+    @NotNull
+    private LocalDate dateDebut;
+    @NotNull
+    private LocalDate dateFin;
+    private String motif;
+}

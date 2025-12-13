@@ -1,0 +1,220 @@
+<div class="dashboard-wrapper">
+  <!-- Top Navigation -->
+  <header class="top-header">
+    <div class="search-bar">
+      <mat-icon>search</mat-icon>
+      <input type="text" placeholder="Rechercher ...">
+    </div>
+    <div class="header-actions">
+      <div class="notification-wrapper">
+        <button mat-icon-button class="notification-btn" (click)="toggleNotifications()" aria-label="Notifications">
+          <mat-icon [matBadge]="unreadCount" matBadgeColor="warn">notifications</mat-icon>
+        </button>
+
+        <div class="notifications-dropdown" *ngIf="showNotificationsDropdown">
+          <div class="dropdown-header">Notifications</div>
+          <div class="notifications-list">
+            <div *ngIf="notifications?.length === 0" class="no-notifs">Aucune notification</div>
+            <div *ngFor="let n of notifications" class="notif-item" [class.unread]="!n.lu" (click)="markNotificationRead(n)">
+              <div class="notif-title">{{ n.titre }}</div>
+              <div class="notif-message">{{ n.message }}</div>
+              <div class="notif-time">{{ n.createdAt | date:'short' }}</div>
+            </div>
+          </div>
+          <div class="dropdown-footer"><button mat-button (click)="loadNotifications()">Rafraîchir</button></div>
+        </div>
+      </div>
+
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-btn">
+        <img [src]="'https://ui-avatars.com/api/?name=' + (userPrenom || 'User') + '&background=4361ee&color=fff'" alt="User" class="avatar">
+        <span>{{ userPrenom || 'Utilisateur' }}</span>
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Déconnexion</span>
+        </button>
+      </mat-menu>
+    </div>
+  </header>
+
+  <div class="dashboard-content">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <mat-icon>dashboard</mat-icon>
+        <span>Accueil</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a routerLink="/rules" routerLinkActive="active" class="nav-item">
+          <mat-icon>description</mat-icon>
+          <span>Règles concernant les demandes</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Employee Dashboard -->
+      <div *ngIf="userRole === 'SALARIE'" class="employee-dashboard">
+        <div class="action-cards">
+          <div class="action-card" (click)="openSoldeModal()">
+            <div class="card-icon green">
+              <mat-icon>calendar_today</mat-icon>
+            </div>
+            <div class="card-content">
+              <h3>Consulter solde de congés</h3>
+              <button class="btn-view">VOIR</button>
+            </div>
+          </div>
+
+          <div class="action-card" (click)="navigateTo('absences')">
+            <div class="card-icon red">
+              <mat-icon>event_busy</mat-icon>
+            </div>
+            <div class="card-content">
+              <h3>Consulter historique des absences</h3>
+              <button class="btn-view">VOIR</button>
+            </div>
+          </div>
+
+          <div class="action-card" routerLink="/my-requests">
+            <div class="card-icon dark">
+              <mat-icon>visibility</mat-icon>
+            </div>
+            <div class="card-content">
+              <h3>Afficher mes demandes</h3>
+              <button class="btn-view">VOIR</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Side Panel -->
+        <div class="side-panel">
+          <div class="panel-section">
+            <h4>Informations</h4>
+            <div class="info-card">
+              <p class="info-label">{{ currentUser?.departementLibelle || '—' }}</p>
+              <p class="info-value">{{ currentUser?.poste || '—' }}</p>
+              <p class="info-detail">{{ yearsOfServiceText || '—' }}</p>
+              <button class="btn-details">Voir Details</button>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <h4>Jours fériés du Sénégal</h4>
+            <div class="month-nav" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+              <button mat-icon-button (click)="prevMonth()"><mat-icon>chevron_left</mat-icon></button>
+              <div class="month-title">{{ months[monthIndex] }}</div>
+              <button mat-icon-button (click)="nextMonth()"><mat-icon>chevron_right</mat-icon></button>
+            </div>
+            <ng-container *ngIf="getSenegalHolidaysForCurrentMonth().length; else noHolidays">
+              <div class="holiday-card" *ngFor="let h of getSenegalHolidaysForCurrentMonth()">
+                <p class="holiday-name">{{ h.name }}</p>
+                <p class="holiday-date">{{ h.date }}</p>
+              </div>
+            </ng-container>
+            <ng-template #noHolidays>
+              <div class="holiday-card">
+                <p class="holiday-name">Aucun jour férié</p>
+                <p class="holiday-date">—</p>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Dashboard -->
+      <div *ngIf="userRole === 'ADMIN'" class="admin-dashboard">
+        <h2>Administration</h2>
+        <div class="admin-actions">
+          <mat-card class="admin-card" routerLink="/users">
+            <mat-icon>people</mat-icon>
+            <h3>Gestion des utilisateurs</h3>
+          </mat-card>
+          <mat-card class="admin-card" (click)="navigateTo('requests')">
+            <mat-icon>assignment</mat-icon>
+            <h3>Gestion des congés</h3>
+          </mat-card>
+          <mat-card class="admin-card" routerLink="/departements">
+            <mat-icon>business</mat-icon>
+            <h3>Gestion des départements</h3>
+          </mat-card>
+          <mat-card class="admin-card" routerLink="/entreprises">
+            <mat-icon>apartment</mat-icon>
+            <h3>Gestion des entreprises</h3>
+          </mat-card>
+          <mat-card class="admin-card" routerLink="/type-conges">
+            <mat-icon>event</mat-icon>
+            <h3>Types de congés</h3>
+          </mat-card>
+        </div>
+      </div>
+
+      <!-- Manager Dashboard -->
+      <div *ngIf="userRole === 'MANAGER'" class="manager-dashboard">
+        <div class="kpi-cards">
+          <div class="kpi-card">
+            <div class="kpi-value">{{ managerTotalEmployees }}</div>
+            <div class="kpi-label">Total des employés<br>du service</div>
+          </div>
+          <div class="kpi-card blue">
+            <div class="kpi-value">{{ managerActiveEmployees }}</div>
+            <div class="kpi-label">Employés actifs</div>
+          </div>
+          <div class="kpi-card yellow">
+            <div class="kpi-value">{{ managerPendingDemandes }}</div>
+            <div class="kpi-label">Total demandes<br>en attente</div>
+          </div>
+          <div class="kpi-card red">
+            <div class="kpi-value">{{ managerTotalAbsents }}</div>
+            <div class="kpi-label">Total des Absents</div>
+          </div>
+        </div>
+        <app-manager-requests></app-manager-requests>
+      </div>
+
+      <!-- HR Dashboard -->
+      <div *ngIf="userRole === 'SERVICE_RH'" class="rh-dashboard">
+        <h2>Service RH</h2>
+        <div class="admin-actions">
+          <mat-card class="admin-card" (click)="navigateTo('rh-requests')">
+            <mat-icon>assignment</mat-icon>
+            <h3>Gestion des congés</h3>
+          </mat-card>
+          <mat-card class="admin-card" routerLink="/departements">
+            <mat-icon>business</mat-icon>
+            <h3>Gestion des départements</h3>
+          </mat-card>
+          <mat-card class="admin-card" routerLink="/type-conges">
+            <mat-icon>event</mat-icon>
+            <h3>Types de congés</h3>
+          </mat-card>
+        </div>
+      </div>
+
+      <!-- Chef Service Dashboard -->
+      <div *ngIf="userRole === 'CHEF_SERVICE'" class="chef-service-dashboard">
+        <h2>Chef de Service</h2>
+        <div class="admin-actions">
+          <mat-card class="admin-card" (click)="navigateTo('chef-service-requests')">
+            <mat-icon>assignment</mat-icon>
+            <h3>Gestion des congés</h3>
+          </mat-card>
+        </div>
+      </div>
+
+      <!-- DG Dashboard -->
+      <div *ngIf="userRole === 'DG'" class="dg-dashboard">
+        <h2>Directeur Général</h2>
+        <div class="admin-actions">
+          <mat-card class="admin-card" (click)="navigateTo('dg-requests')">
+            <mat-icon>assignment</mat-icon>
+            <h3>Gestion des congés</h3>
+          </mat-card>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

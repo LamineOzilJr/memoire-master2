@@ -1,0 +1,52 @@
+<div class="dialog-container dg-dialog">
+  <h2>Traiter la demande de congé (Directeur Général)</h2>
+
+  <!-- Make the main content scrollable inside the dialog body -->
+  <div class="dialog-body">
+    <div class="request-info">
+      <p><strong>Employé:</strong> {{ data.request.userName }}</p>
+      <p><strong>Type de congé:</strong> {{ data.request.typeCongeLibelle }}</p>
+      <p><strong>Période:</strong> {{ data.request.dateDebut | date:'shortDate' }} au {{ data.request.dateFin | date:'shortDate' }}</p>
+      <p><strong>Nombre de jours:</strong> {{ data.request.nombreJours }}</p>
+      <p><strong>Motif:</strong> {{ data.request.motif || 'Non spécifié' }}</p>
+      <p><strong>Statut Chef Service:</strong> <span class="status-badge approuve">Validé</span></p>
+      <p *ngIf="data.request.commentaireChefService">
+        <strong>Commentaire Chef Service:</strong> {{ data.request.commentaireChefService }}
+      </p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="actions">
+      <button mat-stroked-button class="btn-validate" (click)="selectAction('validate')"
+              [class.selected]="selectedAction === 'validate'">
+        <mat-icon>check_circle</mat-icon> Valider
+      </button>
+      <button mat-stroked-button class="btn-info" (click)="selectAction('info')"
+              [class.selected]="selectedAction === 'info'">
+        <mat-icon>info</mat-icon> Plus d'infos
+      </button>
+      <button mat-stroked-button class="btn-reject" (click)="selectAction('reject')"
+              [class.selected]="selectedAction === 'reject'">
+        <mat-icon>cancel</mat-icon> Refuser
+      </button>
+    </div>
+
+    <div *ngIf="selectedAction === 'info' || selectedAction === 'reject'" class="comment-section">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ selectedAction === 'info' ? 'Informations requises' : 'Motif du refus' }}</mat-label>
+        <textarea matInput [(ngModel)]="comment" rows="4" placeholder="Entrez votre message..."></textarea>
+        <mat-hint *ngIf="selectedAction === 'info'">Décrivez les informations supplémentaires nécessaires</mat-hint>
+        <mat-hint *ngIf="selectedAction === 'reject'">Expliquez le motif du refus de cette demande</mat-hint>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="dialog-actions">
+    <button mat-button (click)="cancel()">Annuler</button>
+    <button mat-raised-button class="primary-action" (click)="submit()" [disabled]="!selectedAction">
+      {{ getActionLabel() || 'Sélectionner une action' }}
+    </button>
+  </div>
+</div>
+

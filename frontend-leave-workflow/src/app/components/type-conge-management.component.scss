@@ -1,0 +1,83 @@
+@import './departement-management.component.scss';
+
+// Specific styles for type-conge management
+
+.checkbox-field {
+  margin: 20px 0;
+
+  mat-checkbox {
+    margin-bottom: 8px;
+  }
+
+  mat-hint {
+    font-size: 12px;
+    color: #666;
+  }
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &.required {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    color: #e65100;
+    border: 1px solid #ffb74d;
+  }
+
+  &.optional {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    color: #1565c0;
+    border: 1px solid #90caf9;
+  }
+}
+
+.form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 16px;
+}
+
+.form-container {
+  background: white;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+  padding: 20px;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.form-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+@media (max-width:480px){
+  .form-container {
+    padding: 12px;
+  }
+  .form-header h2 {
+    font-size: 16px;
+  }
+}

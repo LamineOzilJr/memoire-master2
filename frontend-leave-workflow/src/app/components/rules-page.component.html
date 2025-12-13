@@ -1,0 +1,105 @@
+<div class="rules-container">
+  <!-- Header with Close Button -->
+  <div class="rules-header">
+    <h1>Règles Concernant les Demandes de Congés</h1>
+    <button mat-icon-button class="close-btn" (click)="goBack()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <div class="rules-content">
+    <section class="rules-section">
+      <h2>Cadre Légal</h2>
+      <p>Au Sénégal, le droit du travail prévoit des règles précises concernant l'attribution des congés payés annuels.</p>
+    </section>
+
+    <section class="rules-section">
+      <h2>Règles Générales d'Attribution</h2>
+
+      <div class="subsection">
+        <h3>Droit au Congé</h3>
+        <p>Tout travailleur a droit à un congé annuel payé après avoir accompli une période de service continue auprès du même employeur.</p>
+      </div>
+
+      <div class="subsection">
+        <h3>Période de Référence</h3>
+        <p>Le droit aux congés est généralement acquis après 12 mois de service continu.</p>
+      </div>
+    </section>
+
+    <section class="rules-section">
+      <h2>Durée du Congé Annuel</h2>
+      <p>La durée de base du congé annuel est fixée comme suit :</p>
+
+      <div class="subsection">
+        <h3>Travailleurs Locaux</h3>
+        <ul class="rules-list">
+          <li>Droit à 24 jours de travail (ou 2 jours ouvrables) par mois de service effectif, après au moins douze mois de service</li>
+          <li>La durée totale du congé exigible ne peut excéder 30 jours ouvrables par an</li>
+        </ul>
+      </div>
+
+      <div class="subsection">
+        <h3>Travailleurs Expatriés</h3>
+        <p>Les travailleurs recrutés hors du Sénégal, titulaires d'un contrat d'expatrié, ont droit à une durée de congé déterminée sur la base de 5 jours par mois de service effectif.</p>
+      </div>
+    </section>
+
+    <section class="rules-section">
+      <h2>Jours Supplémentaires</h2>
+      <p>Le nombre de jours de congé peut être augmenté en fonction de certains critères :</p>
+
+      <div class="subsection">
+        <h3>Ancienneté</h3>
+        <p>Des jours ouvrables supplémentaires sont accordés en fonction de l'ancienneté :</p>
+        <ul class="rules-list">
+          <li>1 jour ouvrable supplémentaire après 10 ans de services continus ou non dans la même entreprise</li>
+          <li>2 jours ouvrables supplémentaires après 15 ans</li>
+          <li>3 jours ouvrables supplémentaires après 20 ans</li>
+          <li>Et ainsi de suite...</li>
+        </ul>
+      </div>
+
+      <div class="subsection">
+        <h3>Événements Familiaux</h3>
+        <p>Des permissions exceptionnelles non déductibles du congé annuel peuvent être accordées pour des événements familiaux, dans la limite de 15 jours par an.</p>
+      </div>
+
+      <div class="subsection">
+        <h3>Femmes Salariées</h3>
+        <p>Des jours supplémentaires peuvent être accordés aux femmes salariées en fonction du nombre d'enfants mineurs à leur charge.</p>
+      </div>
+    </section>
+
+    <section class="rules-section">
+      <h2>Modalités Pratiques</h2>
+
+      <div class="subsection">
+        <h3>Paiement</h3>
+        <ul class="rules-list">
+          <li>L'employé reçoit une indemnité de congé annuel (correspondant au salaire d'un mois) avant le début de son congé</li>
+          <li>L'indemnisation en lieu et place du congé (paiement du congé non pris) est interdite, sauf en cas de rupture de contrat (licenciement, démission, etc.)</li>
+        </ul>
+      </div>
+
+      <div class="subsection">
+        <h3>Fixation des Dates</h3>
+        <p>La date de départ en congé de chaque travailleur est fixée d'un commun accord entre les parties (employeur et employé).</p>
+      </div>
+    </section>
+
+    <section class="rules-section info-box">
+      <p><strong>Note :</strong> Ces règles sont encadrées par le Code du travail sénégalais et peuvent être complétées par des conventions collectives spécifiques à certaines branches d'activité.</p>
+    </section>
+  </div>
+
+  <!-- Footer Actions -->
+  <div class="rules-footer">
+    <button mat-raised-button color="primary" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Retour au Dashboard
+    </button>
+  </div>
+</div>
+
