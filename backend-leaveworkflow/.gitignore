@@ -37,3 +37,19 @@ build/
 src/main/resources/application.properties
 src/main/resources/application-*.properties
 
+### Environment Variables ###
+# Environment configuration files with sensitive data
+.env
+.env.local
+.env.*.local
+
+### User Uploaded Files ###
+# User-generated content and uploaded files
+uploads/
+/uploads/*
+!/uploads/.gitkeep
+
+### Logs ###
+*.log
+logs/
+

@@ -6,12 +6,12 @@ services:
     image: mysql:8.0
     container_name: leaveworkflow-db
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-}
       MYSQL_DATABASE: ${DB_NAME:-leaveworkflow_db}
-      MYSQL_USER: ${DB_USER:-leaveworkflow}
-      MYSQL_PASSWORD: ${DB_PASSWORD:-leaveworkflow123}
+      MYSQL_USER: ${DB_USER:-root}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-}
     ports:
-      - "3306:3306"
+      - "3308:3306"
     volumes:
       - mysql-data:/var/lib/mysql
     healthcheck:
@@ -33,8 +33,8 @@ services:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/${DB_NAME:-leaveworkflow_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: ${DB_USER:-leaveworkflow}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-leaveworkflow123}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-root}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-}
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_SHOW_SQL: false
       JWT_SECRET: ${JWT_SECRET:-5f8a9b7c6d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c}
@@ -78,3 +78,4 @@ volumes:
 networks:
   leaveworkflow-network:
     driver: bridge
+

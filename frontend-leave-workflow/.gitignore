@@ -41,3 +41,15 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Environment variables with sensitive data
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
